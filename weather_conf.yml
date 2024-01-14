@@ -1,0 +1,15 @@
+cities: 
+  - 'Portland'
+  - 'Chicogo'
+  - 'San Francisco'
+
+data_bounds:
+  temperature:
+    min: -10
+    max: 105
+  humidity:
+    min: 0
+    max: 100
+  wind_speed:
+    min: 0
+    max: 100
