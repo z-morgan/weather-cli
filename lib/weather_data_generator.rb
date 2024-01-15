@@ -62,6 +62,8 @@ class WeatherDataGenerator
         exit 1
       end
     end
+
+    config
   end
 
   def generate_data_point(timestamp)
