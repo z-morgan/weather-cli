@@ -1,3 +1,5 @@
+[![Tests](https://github.com/z-morgan/weather-cli/actions/workflows/tests.yml/badge.svg)](https://github.com/z-morgan/weather-cli/actions/workflows/tests.yml)
+
 # Project 1: Weather Data Processor
 ## Objective: Create a command-line application that processes and displays weather data.
 ## Instructions:
