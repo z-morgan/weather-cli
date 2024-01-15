@@ -13,8 +13,10 @@ class WeatherDataGenerator
   MIN_DATA_TIMESTAMP = MAX_DATA_TIMESTAMP - (60 * 60 * 24 * 365)
   ONE_HOUR_IN_SECONDS = 60 * 60
 
-  def initialize(config_file)
-    config = load_config_from(config_file)
+  attr_reader :city_names, :tempurature, :humidity, :wind_speed
+
+  def initialize(config_file_name)
+    config = load_config_from(config_file_name)
 
     @city_names  = config['cities']
     @temperature = config['data_bounds']['temperature']
@@ -29,7 +31,7 @@ class WeatherDataGenerator
       city = City.new(city_name)
 
       timestamp = MIN_DATA_TIMESTAMP
-      while timestamp <= MAX_DATA_TIMESTAMP do
+      while timestamp < MAX_DATA_TIMESTAMP do
         city.add_weather_data_point(generate_data_point(timestamp))
         timestamp += ONE_HOUR_IN_SECONDS
       end
