@@ -30,7 +30,7 @@ class WeatherDataGenerator
 
       timestamp = MIN_DATA_TIMESTAMP
       while timestamp <= MAX_DATA_TIMESTAMP do
-        city.weather_data[timestamp] = generate_data_point(timestamp)
+        city.add_weather_data_point(generate_data_point(timestamp))
         timestamp += ONE_HOUR_IN_SECONDS
       end
 
