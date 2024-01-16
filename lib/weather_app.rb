@@ -16,34 +16,21 @@ class WeatherApp
   private
 
   def get_city_name
-    city_prompt = 'Enter the city name:'
-    invalid_city_msg = 'Only the cities mentioned in the config file are valid.'
-
     city_name = nil
+    loop do
+      prompt 'Enter the city name:'
+      response = gets.chomp
 
-    prompt_user(city_prompt, invalid_city_msg) do |response|
       city_name = @cities.keys.find do |key|
         # 'pOrTlAnD' and ' Portland ' are valid responses
         key.downcase == response.downcase.strip
       end
+      
+      break if city_name
+      puts 'INVALID RESPONSE: Only the cities mentioned in the config file are valid.'
     end
 
     city_name
-  end
-
-  # requires a block which validates the user's response
-  def prompt_user(prompt_msg, error_msg, &valid_response)
-    response = nil
-
-    loop do
-      print "#{prompt_msg}\n> "
-      response = gets.chomp
-      
-      break if valid_response.call(response) 
-      puts 'INVALID RESPONSE: ' + error_msg
-    end
-
-    response
   end
 
   def get_data_period(city_name)
@@ -78,12 +65,14 @@ class WeatherApp
   end
 
   def run_again?
-    again_prompt = 'Would you like to generate another report? (y/n):'
-    invalid_again_msg = 'Please type [y]es or [n]o.'
+    choice = nil
 
-    choice = prompt_user(again_prompt, invalid_again_msg) do |response|
+    loop do
+      prompt 'Would you like to generate another report? (y/n):'
       # 'y', 'Y', 'yes', etc. are valid responses
-      ['y', 'n'].include? response.downcase.strip[0]
+      choice = gets.chomp.downcase.strip[0]
+      break if ['y', 'n'].include? choice
+      puts 'INVALID RESPONSE: Please type [y]es or [n]o.'
     end
 
     choice == 'y'
