@@ -17,36 +17,39 @@ class WeatherApp
   private
 
   def get_city_name
+    city_prompt = 'Enter the city name:'
+    invalid_city_msg = 'Only the cities mentioned in the config file are valid.'
+
+    prompt_user(city_prompt, invalid_city_msg) do |response|
+      # 'pOrTlAnD' and ' Portland ' are valid responses
+      @cities.keys.any? { |key| key.downcase == response.downcase.strip }
+    end
+  end
+
+  # requires a block which validates the user's response
+  def prompt_user(prompt_msg, error_msg, &valid_response)
     response = nil
+
     loop do
-      prompt 'Enter the city name:'
+      print "#{prompt_msg}\n> "
       response = gets.chomp
       
-      # 'pOrTlAnD' and ' Portland ' are valid responses
-      response = response.downcase.strip
-
-      break if @cities.keys.any? { |k| k.downcase == response }
-      puts 'That was not a valid response. Only the cities mentioned in the config file are valid.'
+      break if valid_response.call(response) 
+      puts 'That was not a valid response. ' + error_msg
     end
+
     response
   end
 
   def run_again?
-    response = nil
-    loop do
-      prompt 'Would you like to generate another report? (y/n):'
-      response = gets.chomp
+    again_prompt = 'Would you like to generate another report? (y/n):'
+    invalid_again_msg = 'That was not a valid response. Please type [y]es or [n]o.'
 
+    choice = prompt_user(again_prompt, invalid_again_msg) do |response|
       # 'y', 'Y', 'yes', etc. are valid responses
-      response = response.downcase.strip[0]
-
-      break if ['y', 'n'].include? response
-      puts 'That was not a valid response. Please type [y]es or [n]o.'
+      ['y', 'n'].include? response.downcase.strip[0]
     end
-    response == 'y'
-  end
 
-  def prompt(message)
-    print "#{message}\n> "
+    choice == 'y'
   end
 end
