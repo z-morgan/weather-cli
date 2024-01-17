@@ -1,6 +1,8 @@
 require 'json'
 
 class WeatherReport
+  attr_reader :city_name, :period, :data_points
+
   def initialize(city_name, period, weather_data)
     @city_name = city_name
     @period = period
@@ -38,9 +40,10 @@ class WeatherReport
     while left <= right do
       middle = left + ((right - left) / 2)
 
-      return 0 if middle == 0
-
       middle_dp_timestamp = weather_data[middle].timestamp
+
+      # catches edge case where first dp_index is 0
+      return 0 if middle == 0 && middle_dp_timestamp > start_timestamp
       pre_middle_dp_timestamp = weather_data[middle - 1].timestamp
 
       # move right if middle data_point is before start_timestamp

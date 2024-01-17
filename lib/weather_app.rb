@@ -28,7 +28,8 @@ class WeatherApp
       end
       
       break if city_name
-      puts 'INVALID RESPONSE: Only the cities mentioned in the config file are valid.'
+      puts 'INVALID RESPONSE: Only the cities mentioned '\
+           'in the config file are valid.'
     end
 
     city_name
@@ -38,28 +39,37 @@ class WeatherApp
     min_timestamp = @cities[city_name].first.timestamp
     max_timestamp = @cities[city_name].last.timestamp
     
-    puts "Weather data for #{city_name} is available for #{min_timestamp} through #{max_timestamp}."
+    puts "Weather data for #{city_name} is available for "\
+         "#{min_timestamp} through #{max_timestamp}."
     
     start_timestamp = nil
     loop do
-      prompt "When should the weather report begin? \nEnter a timestamp in 'YYYY-MM-DD hh:mm:ss' format:"
+      puts 'When should the weather report begin?'
+      prompt "Enter a timestamp in 'YYYY-MM-DD hh:mm:ss' format:"
       response = gets.chomp.strip
       start_timestamp = Time.new(*response.split(/[\- :]/).map(&:to_i))
       
-      # Time#floor and Time#ceil cover edge case bugs due to different sub-second values
-      break if start_timestamp >= min_timestamp.floor && start_timestamp <= max_timestamp.ceil
-      puts 'INVALID RESPONSE: Please enter a timestamp within the period for which data is available.'
+      # Time#floor and Time#ceil cover edge case bugs
+      # due to different sub-second values
+      break if (start_timestamp >= min_timestamp.floor &&
+                start_timestamp <= max_timestamp.ceil)
+      puts 'INVALID RESPONSE: Please enter a timestamp within '\
+           'the period for which data is available.'
     end
 
     end_timestamp = nil
     loop do
-      prompt "When should the weather report end? \nEnter a timestamp in 'YYYY-MM-DD hh:mm:ss' format:"
+      puts 'When should the weather report end?'
+      prompt "Enter a timestamp in 'YYYY-MM-DD hh:mm:ss' format:"
       response = gets.chomp.strip
       end_timestamp = Time.new(*response.split(/[\- :]/).map(&:to_i))
       
-      # Time#floor and Time#ceil cover edge case bugs due to different sub-second values
-      break if end_timestamp >= start_timestamp.floor && end_timestamp <= max_timestamp.ceil
-      puts 'INVALID RESPONSE: Please enter a timestamp between the start timestamp and the end of the available data period.'
+      # Time#floor and Time#ceil cover edge case bugs
+      # due to different sub-second values
+      break if (end_timestamp >= start_timestamp.floor &&
+                end_timestamp <= max_timestamp.ceil)
+      puts 'INVALID RESPONSE: Please enter a timestamp between the'\
+           'start timestamp and the end of the available data period.'
     end
 
     return { start: start_timestamp, end: end_timestamp }
