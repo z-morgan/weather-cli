@@ -1,3 +1,5 @@
+require 'json'
+
 class WeatherApp
   def initialize(cities)
     @cities = cities
@@ -64,31 +66,28 @@ class WeatherApp
     return { start: start_timestamp, end: end_timestamp }
   end
 
-=begin
-find the starting data point (use BS)
-scan from the starting data point to the last datapoint before the end timestamp
-print that in JSON format
-
-A: O(N)-O(log N) time, 
-given a city weather_data array
-- get the index of the first data point (bs helper)
-- create a new array for the weather data points that are in the period
-- iterate from that index up to the last index, and for each:
-  - if the current timestamp is less than the end timestamp, add the data point new array
-    else break
-
-- create a WeatherReport object with the array of data points, the period, and the city name
-- print that object in JSON format
-=end
-
   def generate_weather_report(city_name, period)
     print 'Generating weather report... '
 
-    first_dp_idx = find_first_dp_index(city_name, period[:start])
+    city_data_points = @cities[city_name].weather_data
+    report_data_points = []
+    i = find_first_dp_index(city_name, period[:start])
+
+    # collect the data points within the report period
+    while i < city_data_points.size do
+      break if city_data_points[i].timestamp.floor > (period[:end])
+      report_data_points.push(city_data_points[i])
+      i += 1
+    end
 
     puts 'done.'
 
-
+    puts JSON.pretty_generate({
+      city: city_name,
+      start_time: period[:start],
+      end_time: period[:end],
+      data_points: report_data_points.map(&:to_hash)
+    })
   end
 
   # binary search to find the index of the first data point in the weather report
