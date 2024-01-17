@@ -13,3 +13,5 @@ data_bounds:
   wind_speed:
     min: 0
     max: 100
+
+seconds_since_data_start: 31536000 # 1 year
