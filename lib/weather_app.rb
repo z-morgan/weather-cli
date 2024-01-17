@@ -1,4 +1,4 @@
-require 'json'
+require_relative 'weather_report'
 
 class WeatherApp
   def initialize(cities)
@@ -9,8 +9,7 @@ class WeatherApp
     loop do
       city_name = get_city_name
       period = get_data_period(city_name)
-
-      generate_weather_report(city_name, period)
+      print_weather_report(city_name, period)
       break unless run_again?
     end
   end
@@ -66,58 +65,13 @@ class WeatherApp
     return { start: start_timestamp, end: end_timestamp }
   end
 
-  def generate_weather_report(city_name, period)
+  def print_weather_report(city_name, period)
+    weather_data = @cities[city_name].weather_data
+
     print 'Generating weather report... '
-
-    city_data_points = @cities[city_name].weather_data
-    report_data_points = []
-    i = find_first_dp_index(city_name, period[:start])
-
-    # collect the data points within the report period
-    while i < city_data_points.size do
-      break if city_data_points[i].timestamp.floor > (period[:end])
-      report_data_points.push(city_data_points[i])
-      i += 1
-    end
-
+    report = WeatherReport.new(city_name, period, weather_data)
     puts 'done.'
-
-    puts JSON.pretty_generate({
-      city: city_name,
-      start_time: period[:start],
-      end_time: period[:end],
-      data_points: report_data_points.map(&:to_hash)
-    })
-  end
-
-  # binary search to find the index of the first data point in the weather report
-  def find_first_dp_index(city_name, start_timestamp)
-    data_points = @cities[city_name].weather_data
-
-    left = 0
-    right = data_points.size - 1
-    middle = nil
-    while left <= right do
-      middle = left + ((right - left) / 2)
-
-      return 0 if middle == 0
-
-      middle_dp_timestamp = data_points[middle].timestamp
-      pre_middle_dp_timestamp = data_points[middle - 1].timestamp
-
-      # move right if middle data_point is before start_timestamp
-      if middle_dp_timestamp < start_timestamp
-        left = middle + 1
-
-      # move left if preceeding data_point is also after start_timestamp
-      elsif pre_middle_dp_timestamp > start_timestamp
-        right = middle - 1
-      else
-        break
-      end
-    end
-
-    return middle
+    puts report
   end
 
   def run_again?
