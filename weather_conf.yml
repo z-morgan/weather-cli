@@ -1,6 +1,6 @@
 cities: 
   - 'Portland'
-  - 'Chicogo'
+  - 'Chicago'
   - 'San Francisco'
 
 data_bounds:

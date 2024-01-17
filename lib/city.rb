@@ -23,4 +23,8 @@ class City
   def first
     @weather_data.first
   end
+
+  def last
+    @weather_data.last
+  end
 end
