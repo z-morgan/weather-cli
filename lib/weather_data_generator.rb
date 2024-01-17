@@ -4,12 +4,11 @@ require_relative 'city'
 require_relative 'weather_data_point'
 
 class WeatherDataGenerator
-
-  # THIS CONSTRAINT IS NOT ENFORCED YET
+  # for performance + memory usage
   MAX_CITIES_COUNT = 10
   MAX_DATA_TIMESTAMP = Time.now
 
-  # data only goes back 1 year
+  # data only goes back 1 year (for performance + memory usage)
   MIN_DATA_TIMESTAMP = MAX_DATA_TIMESTAMP - (60 * 60 * 24 * 365)
   ONE_HOUR_IN_SECONDS = 60 * 60
 
@@ -17,6 +16,10 @@ class WeatherDataGenerator
 
   def initialize(config_file_name)
     config = load_config_from(config_file_name)
+
+    if config['cities'].size > MAX_CITIES_COUNT
+      config['cities'] = config['cities'][1..10]
+    end
 
     @city_names  = config['cities']
     @temperature = config['data_bounds']['temperature']
@@ -58,7 +61,8 @@ class WeatherDataGenerator
         retry
 
       else
-        puts "Could not find config file. Make sure that it is named '#{file_name}.yml' or '#{file_name}.yaml'."
+        puts "Could not find config file. Make sure that it is named "\
+             "'#{file_name}.yml' or '#{file_name}.yaml'."
         exit 1
       end
     end

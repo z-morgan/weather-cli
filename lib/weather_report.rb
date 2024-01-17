@@ -13,8 +13,8 @@ class WeatherReport
   def to_s
     JSON.pretty_generate({
       city: @city_name,
-      start_time: @period[:start],
-      end_time: @period[:end],
+      start_time: @period[:start].strftime('%F %T'),
+      end_time: @period[:end].strftime('%F %T'),
       data_points: @data_points.map(&:to_hash)
     })
   end

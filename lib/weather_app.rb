@@ -40,7 +40,8 @@ class WeatherApp
     max_timestamp = @cities[city_name].last.timestamp
     
     puts "Weather data for #{city_name} is available for "\
-         "#{min_timestamp} through #{max_timestamp}."
+         "#{min_timestamp.strftime('%F %T')} through "\
+         "#{max_timestamp.strftime('%F %T')}."
     
     start_timestamp = nil
     loop do
