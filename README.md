@@ -32,7 +32,7 @@ rake test
 ```
 
 ## How it works:
-The app generates weather data using parameters listed in a `weather_conf.yml` file. As soon as data generation is complete, the app will ask which city you want a weather report for.
+The app generates weather data using parameters listed in a `weather_conf.yml` file. As soon as data generation is complete, the app will ask which city the user wants a weather report for.
 ```
 Generating weather data... done.
 Enter the city name:
