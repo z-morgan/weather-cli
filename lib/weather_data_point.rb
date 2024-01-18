@@ -12,7 +12,7 @@ class WeatherDataPoint
 
   def to_hash
     {
-      timestamp: @timestamp,
+      timestamp: @timestamp.strftime('%F %T'),
       tempurature: @temperature,
       humidity: @humidity,
       windSpeed: @wind_speed,
